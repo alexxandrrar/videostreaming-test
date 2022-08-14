@@ -4,7 +4,7 @@ export const series = [
     name: "Stranger things",
     seriesCount: 5,
     genre: "drama",
-    viewes: 6451,
+    views: 6451,
     releaseDate: 2022,
     episodes: [
       { name: "Stranger things serie 1", count: 1 },
@@ -19,7 +19,7 @@ export const series = [
     name: "Sherlock Holmes",
     seriesCount: 7,
     genre: "detective",
-    viewes: 1820,
+    views: 1820,
     releaseDate: 2019,
     episodes: [
       { name: "Sherlock Holmes serie 1", count: 1 },
@@ -36,7 +36,7 @@ export const series = [
     name: "Lucifer",
     seriesCount: 6,
     genre: "drama",
-    viewes: 6754,
+    views: 6754,
     releaseDate: 2021,
     episodes: [
       { name: "Lucifer serie 1", count: 1 },
@@ -52,7 +52,7 @@ export const series = [
     name: "Ann with e",
     seriesCount: 3,
     genre: "drama",
-    viewes: 9812,
+    views: 9812,
     releaseDate: 2019,
     episodes: [
       { name: "Ann with e serie 1", count: 1 },
@@ -65,7 +65,7 @@ export const series = [
     name: "The 100",
     seriesCount: 5,
     genre: "fantasy",
-    viewes: 7654,
+    views: 7654,
     releaseDate: 2014,
     episodes: [
       { name: "The 100 serie 1", count: 1 },
@@ -80,7 +80,7 @@ export const series = [
     name: "Paper house",
     seriesCount: 5,
     genre: "fantasy",
-    viewes: 9165,
+    views: 9165,
     releaseDate: 2019,
     episodes: [
       { name: "Paper house serie 1", count: 1 },
@@ -95,7 +95,7 @@ export const series = [
     name: "Dynasty",
     seriesCount: 7,
     genre: "historical",
-    viewes: 1233,
+    views: 1233,
     releaseDate: 2019,
     episodes: [
       { name: "Dynasty serie 1", count: 1 },
@@ -112,7 +112,7 @@ export const series = [
     name: "Riverdale",
     seriesCount: 7,
     genre: "drama",
-    viewes: 6666,
+    views: 6666,
     releaseDate: 2022,
     episodes: [
       { name: "Riverdale serie 1", count: 1 },

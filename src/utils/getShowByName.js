@@ -1,2 +1,3 @@
-export const getShowByName = (showList, name) =>
-  showList.filter((item) => item.name === name);
+export const getShowByName = (showList, name) => {
+  return showList.filter((item) => item.name === name);
+};
