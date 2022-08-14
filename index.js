@@ -11,7 +11,9 @@ class StreamingService {
   }
 
   addShow(show) {
-    this.shows.push(show);
+    this.shows.includes(show)
+      ? console.log(`${show} has already exist`)
+      : this.shows.push(show);
     console.log(`${show} was added`);
   }
 
@@ -21,6 +23,7 @@ class StreamingService {
     console.log(sortedShowsByGenre.slice(0, sortedShowsByGenre.length / 2));
     return sortedShowsByGenre.slice(0, sortedShowsByGenre.length / 2);
   }
+
   getMostViewedShowsOfYear(year) {
     const showByYear = getShowsByYear(this.shows, year);
     const sortedShowsByYear = showByYear.sort((a, b) => b.viewes - a.viewes);
@@ -42,10 +45,25 @@ class Subscription {
     console.log(`User watched ${showName},now views count is ${show.viewes}`);
   }
   getRecommendationByGenre(genre) {
-    const newArr = this.streamingService.getMostViewedShowOfGenre(genre);
-    const result = newArr[Math.floor(Math.random() * [newArr].length)];
-    console.log(result.name);
-    return result;
+    const result =
+      this.streamingService.getMostViewedShowOfGenre(genre)[
+        Math.floor(
+          Math.random() *
+            [this.streamingService.getMostViewedShowOfGenre(genre)].length
+        )
+      ];
+    console.log(result.name); // працює, але ще 2 рази повертає попередні масиви сортованих шоу :(
+  }
+  getRecommendationTrending() {
+    const currentYear = new Date().getFullYear();
+    const result =
+      this.streamingService.getMostViewedShowsOfYear(currentYear)[
+        Math.floor(
+          Math.random() *
+            [this.streamingService.getMostViewedShowsOfYear(currentYear)].length
+        )
+      ];
+    console.log(result.name); // працює, але 2 рази поверне масиви
   }
 }
 
@@ -69,7 +87,7 @@ class User {
 const netflix = new StreamingService("Netflix");
 for (let i of series) {
   netflix.addShow(i);
-}
+} // додає
 netflix.getMostViewedShowsOfYear(2019); //РАБОТАЕТ
 netflix.getMostViewedShowOfGenre("drama"); //РАБОТАЕТ
 
@@ -77,5 +95,6 @@ const Sasha = new User("Sasha", []);
 const netflixSubscription = Sasha.subscribe(netflix);
 
 netflixSubscription.watch("Dynasty");
-//netflixSubscription.watch("Dynasy"); майже працює, розберися з помилкою
-netflixSubscription.getRecommendationByGenre("drama"); //і то теж ніби працює
+//netflixSubscription.watch("Dynasy"); майже працює, потім помилка
+netflixSubscription.getRecommendationByGenre("drama");
+netflixSubscription.getRecommendationTrending();
