@@ -29,30 +29,23 @@ class StreamingService {
   }
 }
 
-const netflix = new StreamingService("Netflix");
-const news = new StreamingService("News");
-netflix.addShow(series[0]);
-// netflix.addShow(series[1]);
-// netflix.addShow(series[2]);
-// netflix.addShow(series[3]);
-// netflix.addShow(series[4]);
-// netflix.addShow(series[5]);
-// netflix.addShow(series[6]);
-// netflix.addShow(series[7]);
-news.addShow("Hello");
-//netflix.getMostViewedShowsOfYear(2019);
-
 class Subscription {
   constructor(StreamingService) {
     this.streamingService = StreamingService;
   }
 
   watch(showName) {
-    const show = getShowByName(series, showName)[0];
+    const show = getShowByName(series, showName)[0]; //series має наслідуатися зі сервісу, ПЕРЕРОБИИИ
     show === undefined
       ? console.log(`${showName} can not be found`)
       : (show.viewes += 1);
     console.log(`User watched ${showName},now views count is ${show.viewes}`);
+  }
+  getRecommendationByGenre(genre) {
+    const newArr = this.streamingService.getMostViewedShowOfGenre(genre);
+    const result = newArr[Math.floor(Math.random() * [newArr].length)];
+    console.log(result.name);
+    return result;
   }
 }
 
@@ -73,10 +66,16 @@ class User {
   }
 }
 
+const netflix = new StreamingService("Netflix");
+for (let i of series) {
+  netflix.addShow(i);
+}
+netflix.getMostViewedShowsOfYear(2019); //РАБОТАЕТ
+netflix.getMostViewedShowOfGenre("drama"); //РАБОТАЕТ
+
 const Sasha = new User("Sasha", []);
 const netflixSubscription = Sasha.subscribe(netflix);
 
-console.log(netflixSubscription);
-
 netflixSubscription.watch("Dynasty");
-Sasha.subscribe(news);
+//netflixSubscription.watch("Dynasy"); майже працює, розберися з помилкою
+netflixSubscription.getRecommendationByGenre("drama"); //і то теж ніби працює
