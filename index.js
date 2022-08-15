@@ -5,6 +5,27 @@ import { getShowsByYear } from "./src/utils/getShowsByYear.js";
 import { getMostViewedShows } from "./src/utils/getMostViewedOf.js";
 import { getRandomShow } from "./src/utils/getRandomShow.js";
 
+class Show {
+  constructor(name, genre, releaseDate, views) {
+    this.name = name;
+    this.genre = genre;
+    this.releaseDate = releaseDate;
+    this.views = views;
+  }
+}
+
+class Series extends Show {
+  episodes = [];
+  constructor(name, genre, releaseDate, views, episodes) {
+    super(name, genre, releaseDate, views);
+    this.episodes = episodes;
+  }
+  getDuration() {
+    const duration = this.episodes.length * 60;
+    console.log(`${this.name} duration is ${duration} min.`);
+  }
+}
+
 class StreamingService {
   shows = [];
 
@@ -76,8 +97,8 @@ class User {
         `User has already made a subscription on ${StreamingService.name}`
       );
     } else {
-      this.subscriptions.push({ ...new Subscription(StreamingService) });
       console.log(`${this.name} subscribed on ${StreamingService.name}`);
+      this.subscriptions.push({ ...new Subscription(StreamingService) });
     }
 
     return new Subscription(StreamingService);
@@ -85,9 +106,19 @@ class User {
 }
 
 const netflix = new StreamingService("Netflix");
-for (let i of series) {
-  netflix.addShow(i);
+
+for (let i = 0; i < series.length; i++) {
+  netflix.addShow(
+    new Series(
+      series[i].name,
+      series[i].genre,
+      series[i].releaseDate,
+      series[i].views,
+      series[i].episodes
+    )
+  );
 }
+
 netflix.getMostViewedShowsOfYear(2019);
 netflix.getMostViewedShowOfGenre("drama");
 
