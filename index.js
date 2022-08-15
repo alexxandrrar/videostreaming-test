@@ -4,25 +4,62 @@ import { getShowByName } from "./src/utils/getShowByName.js";
 import { getShowsByYear } from "./src/utils/getShowsByYear.js";
 import { getMostViewedShows } from "./src/utils/getMostViewedOf.js";
 import { getRandomShow } from "./src/utils/getRandomShow.js";
+import { getUserSubscriptions } from "./src/utils/getUserSubscriptions.js";
 
-class Show {
-  constructor(name, genre, releaseDate, views) {
+class User {
+  subscriptions = [];
+  constructor(name, subscriptions) {
     this.name = name;
-    this.genre = genre;
-    this.releaseDate = releaseDate;
-    this.views = views;
+    this.subscriptions = subscriptions;
+  }
+
+  subscribe(StreamingService) {
+    if (this.subscriptions.includes(StreamingService)) {
+      console.log(
+        `User has already made a subscription on ${StreamingService.name}`
+      );
+    } else {
+      console.log(`${this.name} subscribed on ${StreamingService.name}`);
+      this.subscriptions.push({ ...new Subscription(StreamingService) });
+    }
+
+    return new Subscription(StreamingService);
+  }
+
+  userSubscriptions() {
+    const list = getUserSubscriptions(this.subscriptions);
+    console.log(`User ${this.name} is subscribed on ${list}`);
   }
 }
 
-class Series extends Show {
-  episodes = [];
-  constructor(name, genre, releaseDate, views, episodes) {
-    super(name, genre, releaseDate, views);
-    this.episodes = episodes;
+class Subscription {
+  constructor(StreamingService) {
+    this.streamingService = StreamingService;
   }
-  getDuration() {
-    const duration = this.episodes.length * 60;
-    console.log(`${this.name} duration is ${duration} min.`);
+
+  watch(showName) {
+    const show = getShowByName(this.streamingService.shows, showName)[0];
+    if (show === undefined) {
+      console.log(`${showName} can not be found`);
+    } else {
+      show.views += 1;
+      console.log(`User watched ${showName}, now views count is ${show.views}`);
+    }
+  }
+
+  getRecommendationByGenre(genre) {
+    const result = getRandomShow(
+      this.streamingService.getMostViewedShowOfGenre(genre)
+    );
+    console.log(result.name);
+  }
+
+  getRecommendationTrending() {
+    const currentYear = new Date().getFullYear();
+    const result = getRandomShow(
+      this.streamingService.getMostViewedShowsOfYear(currentYear)
+    );
+    console.log(result.name);
   }
 }
 
@@ -52,58 +89,29 @@ class StreamingService {
   }
 }
 
-class Subscription {
-  constructor(StreamingService) {
-    this.streamingService = StreamingService;
-  }
-
-  watch(showName) {
-    const show = getShowByName(this.streamingService.shows, showName)[0];
-    if (show === undefined) {
-      console.log(`${showName} can not be found`);
-    } else {
-      show.views += 1;
-      console.log(`User watched ${showName}, now views count is ${show.views}`);
-    }
-  }
-  getRecommendationByGenre(genre) {
-    console.log(
-      getRandomShow(this.streamingService.getMostViewedShowOfGenre(genre)).name
-    );
-    return getRandomShow(this.streamingService.getMostViewedShowOfGenre(genre));
-  }
-  getRecommendationTrending() {
-    const currentYear = new Date().getFullYear();
-    console.log(
-      getRandomShow(this.streamingService.getMostViewedShowsOfYear(currentYear))
-        .name
-    );
-    return getRandomShow(
-      this.streamingService.getMostViewedShowsOfYear(currentYear)
-    );
-  }
-}
-
-class User {
-  subscriptions = [];
-
-  constructor(name, subscriptions) {
+class Show {
+  constructor(name, genre, releaseDate, views) {
     this.name = name;
-    this.subscriptions = subscriptions;
-  }
-  subscribe(StreamingService) {
-    if (this.subscriptions.includes(StreamingService)) {
-      console.log(
-        `User has already made a subscription on ${StreamingService.name}`
-      );
-    } else {
-      console.log(`${this.name} subscribed on ${StreamingService.name}`);
-      this.subscriptions.push({ ...new Subscription(StreamingService) });
-    }
-
-    return new Subscription(StreamingService);
+    this.genre = genre;
+    this.releaseDate = releaseDate;
+    this.views = views;
   }
 }
+
+class Series extends Show {
+  episodes = [];
+
+  constructor(name, genre, releaseDate, views, episodes) {
+    super(name, genre, releaseDate, views);
+    this.episodes = episodes;
+  }
+  getDuration() {
+    const duration = this.episodes.length * 60;
+    console.log(`${this.name} duration is ${duration} min.`);
+  }
+}
+
+// Start
 
 const netflix = new StreamingService("Netflix");
 
@@ -118,9 +126,6 @@ for (let i = 0; i < series.length; i++) {
     )
   );
 }
-
-netflix.getMostViewedShowsOfYear(2019);
-netflix.getMostViewedShowOfGenre("drama");
 
 const Sasha = new User("Sasha", []);
 const netflixSubscription = Sasha.subscribe(netflix);
